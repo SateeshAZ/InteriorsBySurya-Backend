@@ -60,8 +60,7 @@ async Task InitializeCosmosDBAsync(CosmosClient cosmosClient)
     // Create the container
     Container container = await database.CreateContainerIfNotExistsAsync(
         id: containerId,
-        partitionKeyPath: partitionKeyPath,
-        throughput: 400 // Provisioned throughput in RU/s
+        partitionKeyPath: partitionKeyPath
     );
     Console.WriteLine($"Container '{container.Id}' created or already exists.");
 }

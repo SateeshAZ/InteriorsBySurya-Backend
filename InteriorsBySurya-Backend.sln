@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survey", "Survey\Survey.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyManagement", "CompanyManagement\CompanyManagement.csproj", "{283B58BC-2E5B-4CBF-B1AA-7BC74BE3A90C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicQuotationBuilder", "BasicQuotationBuilder\BasicQuotationBuilder.csproj", "{5CA4F1C7-5ACD-401D-A4D5-384F905660CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{283B58BC-2E5B-4CBF-B1AA-7BC74BE3A90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{283B58BC-2E5B-4CBF-B1AA-7BC74BE3A90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{283B58BC-2E5B-4CBF-B1AA-7BC74BE3A90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CA4F1C7-5ACD-401D-A4D5-384F905660CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA4F1C7-5ACD-401D-A4D5-384F905660CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA4F1C7-5ACD-401D-A4D5-384F905660CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA4F1C7-5ACD-401D-A4D5-384F905660CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,16 +2,13 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Survey.Repository;
-using Survey.Services;
-
 
 // Cosmos DB connection
-string cosmosDbConnectionString = Environment.GetEnvironmentVariable("CosmosDBConnectionString") ?? throw new InvalidOperationException("CosmosDBConnection is not set.");
+string cosmosDbConnectionString = Environment.GetEnvironmentVariable("CosmosDBConnection") ?? throw new InvalidOperationException("CosmosDBConnection is not set.");
 // Cosmos DB Configuration
 string databaseId = "InteriorsBySurya";
-string containerId = "Surveys";
-string partitionKeyPath = "/ClientId";
+string containerId = "Quotations";
+string partitionKeyPath = "/Tenantid";
 // Initialize CosmosClient
 CosmosClient cosmosClient = new CosmosClient(cosmosDbConnectionString);
 try
@@ -33,15 +30,26 @@ catch (Exception ex)
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
+
 builder.Services.AddSingleton((s) =>
 {
-    return new CosmosClient(cosmosDbConnectionString);
+    string connectionString = Environment.GetEnvironmentVariable("CosmosDBConnection");
+    return new CosmosClient(connectionString);
 });
-builder.Services.AddScoped<ISurveyService, SurveyService>();
-builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
+
+//builder.Services.AddScoped<ITodoRepo, TodoRepo>();
+//builder.Services.AddScoped<ITodosService, TodoService>();
+
+// Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
+// builder.Services
+//     .AddApplicationInsightsTelemetryWorkerService()
+//     .ConfigureFunctionsApplicationInsights();
 
 builder.Build().Run();
 
+
+
+// Function to create the database and container if they don't exist
 async Task InitializeCosmosDBAsync(CosmosClient cosmosClient)
 {
     // Create the database
@@ -55,3 +63,4 @@ async Task InitializeCosmosDBAsync(CosmosClient cosmosClient)
     );
     Console.WriteLine($"Container '{container.Id}' created or already exists.");
 }
+
