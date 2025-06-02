@@ -10,6 +10,7 @@ namespace UserManagement.services
     public interface IUserService
     {
         Task<IdentityResult> RegisterUserAsync(string email, string password);
+        Task<IdentityResult> ChangePasswordAsync(ChangePassword changePassword, string userId);
         Task<string> LoginAsync(LoginModel login);
         Task SendConfirmationEmailAsync(string emailAddress, string token, string callbackUrl);
         Task<IdentityResult> ConfirmEmailAsync(string userId, string token);
@@ -50,6 +51,13 @@ namespace UserManagement.services
             {
                 result = await _userManager.AddToRoleAsync(user, "super_admin");
             }
+            return result;
+
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(ChangePassword changePassword, string userId)
+        {
+            var result = await _userRepository.ChangePasswordAsync(changePassword, userId);
             return result;
 
         }

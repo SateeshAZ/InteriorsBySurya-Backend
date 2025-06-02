@@ -57,6 +57,7 @@ builder.Services.AddCors(options =>
 
 
 
+
 var app = builder.Build();
 // Run migrations during startup
 using (var scope = app.Services.CreateScope())

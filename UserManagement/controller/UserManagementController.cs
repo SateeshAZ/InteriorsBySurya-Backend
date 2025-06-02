@@ -13,6 +13,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UserManagement.models;
 using UserManagement.services;
 
@@ -23,11 +24,15 @@ namespace UserManagement.controller
         private readonly IUserService _userService;
 
         private readonly ILogger<UserRegistration> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserRegistration(ILogger<UserRegistration> logger, IUserService userService)
+
+        public UserRegistration(ILogger<UserRegistration> logger, IUserService userService, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _userService = userService;
+            _userManager = userManager;
+
         }
 
         [Function("RegisterUser")]
@@ -53,6 +58,29 @@ namespace UserManagement.controller
             }
 
             return new BadRequestObjectResult(result.Errors);
+        }
+
+        [Function("ChangePassword")]
+        public async Task<IActionResult> ChangePasswordAsync(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ChangePassword")] HttpRequest req)
+        {
+
+            var authHeader = req.Headers["Authorization"].FirstOrDefault();
+            if (string.IsNullOrEmpty(authHeader))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var token = authHeader.Substring("Bearer ".Length);
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var userId = jwtToken.Claims.FirstOrDefault().Value;
+
+            var data = await new StreamReader(req.Body).ReadToEndAsync();
+            var passwordModel = JsonConvert.DeserializeObject<ChangePassword>(data);
+            var result = await _userService.ChangePasswordAsync(passwordModel, userId);
+            return result.Succeeded ? new OkResult() : new BadRequestObjectResult(result.Errors);
         }
 
         [Function("ConfirmEmail")]

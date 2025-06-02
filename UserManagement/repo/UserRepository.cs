@@ -16,6 +16,7 @@ namespace UserManagement.repo
     public interface IUserRepository
     {
         Task<IdentityResult> RegisterUserAsync(IdentityUser user, string password);
+        Task<IdentityResult> ChangePasswordAsync(ChangePassword changePassword, string userId);
         Task<string> LoginAsync(LoginModel login);
         Task<string> GenerateEmailConfirmationTokenAsync(IdentityUser user);
         Task<string> GeyUniqueIdByemailAsync(string user);
@@ -106,6 +107,14 @@ namespace UserManagement.repo
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(ChangePassword changePassword, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var result = await _userManager.ChangePasswordAsync(user, changePassword.OldPassword, changePassword.NewPassword);
+            return result;
+
         }
     }
 
