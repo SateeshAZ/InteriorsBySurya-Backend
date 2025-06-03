@@ -14,6 +14,7 @@
     <PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.OpenApi" Version="1.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
     <!-- Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4. -->

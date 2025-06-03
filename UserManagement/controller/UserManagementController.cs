@@ -3,6 +3,7 @@
 
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using Azure.Messaging;
@@ -10,8 +11,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UserManagement.models;
@@ -35,9 +39,18 @@ namespace UserManagement.controller
 
         }
 
+        [OpenApiOperation(
+           operationId: "Authentication",
+           tags: new[] { "Authentication" },
+           Summary = "SignUp",
+           Description = "Register a new user."
+           )]
+        [OpenApiRequestBody("application/json", typeof(RegisterUserModel), Required = true, Description = "User Data")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "application/json", bodyType: typeof(IActionResult), Summary = "User Was Registered", Description = "This returns the result.")]
+
         [Function("RegisterUser")]
         public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "register")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Register")] HttpRequest req)
         {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var data = JsonConvert.DeserializeObject<RegisterUserModel>(requestBody);
@@ -60,6 +73,15 @@ namespace UserManagement.controller
             return new BadRequestObjectResult(result.Errors);
         }
 
+        [OpenApiOperation(
+           operationId: "ChangePassword",
+           tags: new[] { "Authentication" },
+           Summary = "ChangePassword",
+           Description = "ChangePassword."
+           )]
+        [OpenApiSecurity("Bearer", SecuritySchemeType.ApiKey, Name = "Authorization", In = OpenApiSecurityLocationType.Header)]
+        [OpenApiRequestBody("application/json", typeof(ChangePassword), Required = true, Description = "Change Password Description")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "application/json", bodyType: typeof(IActionResult), Summary = "Password Updated", Description = "This returns the result.")]
         [Function("ChangePassword")]
         public async Task<IActionResult> ChangePasswordAsync(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ChangePassword")] HttpRequest req)
@@ -112,6 +134,14 @@ namespace UserManagement.controller
             return new BadRequestObjectResult("Email confirmation failed.");
         }
 
+        [OpenApiOperation(
+           operationId: "LogIn",
+           tags: new[] { "Authentication" },
+           Summary = "LogIn",
+           Description = "LogIn."
+           )]
+        [OpenApiRequestBody("application/json", typeof(LoginModel), Required = true, Description = "User Data")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "application/json", bodyType: typeof(IActionResult), Summary = "User Was Logged In", Description = "This returns the result.")]
 
         [Function("Login")]
         public async Task<IActionResult> LoginAsync(
