@@ -62,7 +62,6 @@ var app = builder.Build();
 // Run migrations during startup
 using (var scope = app.Services.CreateScope())
 {
-    Console.WriteLine("Done");
     var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     dbContext.Database.Migrate();
 }
