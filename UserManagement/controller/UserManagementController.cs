@@ -115,7 +115,7 @@ namespace UserManagement.controller
 
         [Function("Login")]
         public async Task<IActionResult> LoginAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var loginModel = JsonConvert.DeserializeObject<LoginModel>(requestBody);
