@@ -62,7 +62,7 @@ namespace UserManagement.controller
 
         [Function("ChangePassword")]
         public async Task<IActionResult> ChangePasswordAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ChangePassword")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ChangePassword")] HttpRequest req)
         {
 
             var authHeader = req.Headers["Authorization"].FirstOrDefault();
